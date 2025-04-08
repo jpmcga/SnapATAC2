@@ -274,6 +274,11 @@ def _likelihood_ratio_test(
     from sklearn.linear_model import LogisticRegression
     from sklearn.metrics import log_loss
 
+    # Check for invariance in y: if only one class is present, we can't fit logistic regression.
+    if len(np.unique(y)) < 2:
+        # Return a default non-significant p-value.
+        return 1.0
+
     model = LogisticRegression(penalty=None, random_state=0, n_jobs=1,
         solver="lbfgs", warm_start=False,
         max_iter = 1000,
